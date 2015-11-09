@@ -13,11 +13,11 @@ import java.sql.*;
  */
 public class DBConection {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost/EMP";
+    static final String DB_URL = "jdbc:mysql://mysqlfib.fib.upc.es";
     
     //  Database credentials
-    static final String USER = "username";
-    static final String PASS = "password";
+    static final String USER = "pti02";
+    static final String PASS = "BDpti02";
     
     public ResultSet conectexecute(String sqlquery){
         Connection conn = null;
