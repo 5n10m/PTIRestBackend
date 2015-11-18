@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(pti.devices.class);
+        resources.add(pti.devicesstate.class);
         resources.add(pti.login.class);
         resources.add(pti.test.class);
     }

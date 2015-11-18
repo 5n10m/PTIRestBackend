@@ -25,14 +25,14 @@ public class devices {
     
     
     @GET
-    public ArrayList getdevicesbyuser(@QueryParam("user") String user, @QueryParam("token") String token) {
+    public int[] getdevicesbyuser(@QueryParam("user") String user, @QueryParam("token") String token) {
         return $getdevicesbyuser(user, token);
     }
 
-    ArrayList $getdevicesbyuser(String user, String token) {
-        ArrayList<String> returnable =  new ArrayList<String>();
+    int[] $getdevicesbyuser(String user, String token) {
+       int[] returnable = {1,2,3};
         //Conect to DB
-        DBConection db = null;
+        /*DBConection db = null;
         ResultSet rs = db.conectexecute("Select count (*) as contador from users where username = "+user+" and token = "+token+";"); // Verificar la validesa del token
         try{
         while(rs.next()){
@@ -41,34 +41,13 @@ public class devices {
             }
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         return returnable;
-    }
-    
-    @POST
-    public Integer getdevicestate(@QueryParam("user") String user, @QueryParam("token") String token, @QueryParam("deviceID") Integer deviceID) {
-        return $getdevicestate(user, token, deviceID);
-    }
-    Integer $getdevicestate(String user, String token, Integer deviceID){
-        Integer state = null;
-        //Connect to DB
-         DBConection db = null;
-        ResultSet rs = db.conectexecute("Select state from users u, devices d where u.username = "+user+" and u.token = "+token+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
-        try{
-        while(rs.next()){
-                //Retrieve by column name
-                state = rs.getInt("state");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return state;
     }
     
     
     @PUT
-    public Integer setdevicestate(@QueryParam("user") String user,  @QueryParam("token") String token, @QueryParam("deviceID") Integer deviceID, @QueryParam("state") Integer state) {
+    public Integer setdevicestate(@FormParam("user") String user, @FormParam("token") String token, @FormParam("deviceID") Integer deviceID, @FormParam("state") Integer state) {
         return $setdevicestate(user, token, deviceID, state);
     }
 
@@ -85,6 +64,8 @@ public class devices {
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //Send to the raspberry the new state
+        
         
         return state;
     }
