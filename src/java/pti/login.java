@@ -7,6 +7,8 @@ package pti;
 */
 import java.sql.*;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 /**
@@ -27,8 +29,9 @@ public class login {
     StringTokenizer $login(String user, String password) {
         StringTokenizer token = new StringTokenizer("user"+"password");
         
-        /*DBConection db = null;
-        ResultSet rs = db.conectexecute("Select count (*) as contador from users where username = "+user+" and password = "+password+";");
+        DBConection db = null;
+        //ResultSet rs = db.conectexecute("Select count (*) as contador from users where username = "+user+" and password = "+password+";");
+        ResultSet rs = db.conectexecute("Select * from users;");
         try {
             while(rs.next()){
                 //Retrieve by column name
@@ -38,7 +41,7 @@ public class login {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        // GENERATE NEW TOKEN WITH NEW VALIDITY*/
+        // GENERATE NEW TOKEN WITH NEW VALIDITY
         
         return token;
     }

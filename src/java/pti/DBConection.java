@@ -1,6 +1,8 @@
 package pti;
 
 
+
+
 import java.sql.*;
 
 /*
@@ -15,11 +17,14 @@ import java.sql.*;
  */
 public class DBConection {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://mysqlfib.fib.upc.es";
+    //static final String DB_URL = "jdbc:mysql://mysqlfib.fib.upc.es";
+    static final String DB_URL = "jdbc:mysql://localhost:3306";
     
     //  Database credentials
-    static final String USER = "pti02";
-    static final String PASS = "BDpti02";
+//    static final String USER = "pti02";
+//    static final String PASS = "BDpti02";
+    static final String USER = "pti";
+    static final String PASS = "ungaterasmus";
     
     public ResultSet conectexecute(String sqlquery){
         Connection conn = null;
