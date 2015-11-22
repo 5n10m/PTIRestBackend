@@ -22,20 +22,23 @@ public class login {
     
     
     @GET
-    public StringTokenizer login(@QueryParam("user") String user, @QueryParam("password") String password) {
+    public String login(@QueryParam("user") String user, @QueryParam("password") String password) {
         return $login(user, password);
     }
     
-    StringTokenizer $login(String user, String password) {
-        StringTokenizer token = new StringTokenizer("user"+"password");
+    String $login(String user, String password) {
+        String token = new String("user"+"password");
         
         DBConection db = null;
         //ResultSet rs = db.conectexecute("Select count (*) as contador from users where username = "+user+" and password = "+password+";");
-        ResultSet rs = db.conectexecute("Select * from users;");
+        ResultSet rs = db.conectexecute("Select count (*) as contador from users where username =\""+user+" and password = \""+password+";");
         try {
             while(rs.next()){
                 //Retrieve by column name
-                int result  = rs.getInt("contador");
+                int contador = rs.getInt("contador");
+                token = Integer.toString(contador);
+                if (contador < 0) token = "ACCES PERMES";
+                //token  = Integer.toString(rs.getInt("contador"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,24 +49,10 @@ public class login {
         return token;
     }
     
-    @POST
-    public StringTokenizer loginpost(@FormParam("user") String user, @FormParam("password") String password) {
+    /*@POST
+    public String loginpost(@FormParam("user") String user, @FormParam("password") String password) {
         return $login(user, password);
     }
-    
-    StringTokenizer $loginpost(String user, String password) {
-        StringTokenizer token = new StringTokenizer("user"+"password");
-        /*DBConection db = null;
-        ResultSet rs = db.conectexecute("Select count (*) as contador from users where username = "+user+" and password = "+password+";");
-        try {
-            while(rs.next()){
-                //Retrieve by column name
-                int result  = rs.getInt("contador");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        return token;
-    }
+    */
     
 }
