@@ -96,12 +96,6 @@ public class devicesstate {
                     HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
                     con.setRequestMethod("POST");
                     con.setDoOutput(true);
-                    DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-                    
-                    String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
-                    wr.writeBytes(urlParameters);
-                    wr.flush();
-                    wr.close();
                     con.setRequestProperty("state", Integer.toString(rs.getInt(newstate)));
                 
                 } catch (MalformedURLException ex) {
