@@ -27,7 +27,7 @@ public class login {
     }
     
     String $login(String user, String password) {
-        String token = new String("user"+"password");
+        String token = null;
         
         
         Connection conn = null;
@@ -36,16 +36,18 @@ public class login {
         
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\DEFIB\\Desktop\\pti.sqlite"); 
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite"); 
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("Select count (*) as contador from users where username =\""+user+" and password = \""+password+";");
+            int contador = 0;
+            rs = stmt.executeQuery("Select count (*) as contador from users where username =\""+user+"\" and password = \""+password+"\";");
             while(rs.next()){
                 //Retrieve by column name
-                int contador = rs.getInt("contador");
-                token = Integer.toString(contador);
-                if (contador < 0) token = "ACCES PERMES";
-                //token  = Integer.toString(rs.getInt("contador"));
+                contador = rs.getInt("contador");
             }
+                token = Integer.toString(contador);
+                if (contador > 0) token = "ACCES PERMES";
+                //token  = Integer.toString(rs.getInt("contador"));
+            
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

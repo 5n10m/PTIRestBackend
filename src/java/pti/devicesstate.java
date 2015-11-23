@@ -1,14 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package pti;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -27,12 +34,12 @@ import javax.net.ssl.HttpsURLConnection;
 
 @Stateless
 @Path("/devicesstate")
-    
+
 
 public class devicesstate {
     
     @GET
-     public Integer getdevicestate(@QueryParam("user") String user, @QueryParam("password") String password, @QueryParam("deviceID") Integer deviceID) throws SQLException {
+    public Integer getdevicestate(@QueryParam("user") String user, @QueryParam("password") String password, @QueryParam("deviceID") Integer deviceID) throws SQLException {
         return $getdevicestate(user, password, deviceID);
     }
     Integer $getdevicestate(String user, String password, Integer deviceID) throws SQLException{
@@ -42,7 +49,7 @@ public class devicesstate {
         Integer state = -1;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\DEFIB\\Desktop\\pti.sqlite");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite");
             stmt = conn.createStatement();
             while(rs.next()){
                 rs = stmt.executeQuery("Select state from users u, devices d where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
@@ -52,7 +59,7 @@ public class devicesstate {
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
-        
+            
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,46 +78,55 @@ public class devicesstate {
         Integer state = -1;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\DEFIB\\Desktop\\pti.sqlite");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite");
             stmt = conn.createStatement();
             while(rs.next()){
                 rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
                 
                 //Retrieve by column name
                 state = rs.getInt("state");
+                                
+                String encodedQuery = URLEncoder.encode("", "UTF-8");
+                String postData = "state="+newstate+encodedQuery;
                 
-                /*PostMethod post = new PostMethod("http://jakarata.apache.org/");
-                NameValuePair[] data = {
-                new NameValuePair("user", "joe"),
-                new NameValuePair("password", "bloggs")
-                };
-                post.setRequestBody(data);
-                // execute method and handle any error responses.
-                ...
-                InputStream in = post.getResponseBodyAsStream();*/
+                // Connect to the web
+                URL url = new URL("http://hers.no-ip.org/cgi-bin/file_test.py");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoOutput(true);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                connection.setRequestProperty("Content-Length",  String.valueOf(postData.length()));
                 
-                String url = "http://hers.no-ip.org/file_test.html";
-		URL obj;
-                try {
-                    obj = new URL(url);
-                    HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-                    con.setRequestMethod("POST");
-                    con.setDoOutput(true);
-                    con.setRequestProperty("state", Integer.toString(rs.getInt(newstate)));
+                // Write data
+                OutputStream os = connection.getOutputStream();
+                os.write(postData.getBytes());
                 
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
-                }catch (IOException ex) {
-                        Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                // Read response
+                StringBuilder responseSB = new StringBuilder();
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                
+                String line;
+                while ( (line = br.readLine()) != null){
+                    responseSB.append(line);
+                }
+                state = Integer.parseInt(responseSB.toString());
+                
+                // Close streams
+                br.close();
+                os.close();
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
-        
+            
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
         }
-        state = 2;
         return state;
     }
 }
