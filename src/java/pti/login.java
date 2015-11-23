@@ -29,10 +29,16 @@ public class login {
     String $login(String user, String password) {
         String token = new String("user"+"password");
         
-        DBConection db = null;
-        //ResultSet rs = db.conectexecute("Select count (*) as contador from users where username = "+user+" and password = "+password+";");
-        ResultSet rs = db.conectexecute("Select count (*) as contador from users where username =\""+user+" and password = \""+password+";");
+        
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        
         try {
+            Class.forName("org.sqlite.JDBC");
+            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\DEFIB\\Desktop\\pti.sqlite"); 
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("Select count (*) as contador from users where username =\""+user+" and password = \""+password+";");
             while(rs.next()){
                 //Retrieve by column name
                 int contador = rs.getInt("contador");
@@ -41,6 +47,8 @@ public class login {
                 //token  = Integer.toString(rs.getInt("contador"));
             }
         } catch (SQLException ex) {
+            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
         
