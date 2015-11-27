@@ -19,7 +19,6 @@ import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import sun.net.www.http.HttpClient;
 
 /**
  *
@@ -36,7 +35,7 @@ public class test {
             String res = "Hola " + user;
             
             String encodedQuery = URLEncoder.encode("", "UTF-8");
-            String postData = "state=55" + encodedQuery;
+            String postData = "state="+user+ encodedQuery;
             
             // Connect to google.com
             URL url = new URL("http://hers.no-ip.org/cgi-bin/file_test.py");

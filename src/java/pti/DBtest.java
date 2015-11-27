@@ -37,7 +37,7 @@ public class DBtest {
             Class.forName("org.sqlite.JDBC");
             
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite");
+            conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             
             System.out.println("Creating statement...");
             stmt = conn.createStatement();

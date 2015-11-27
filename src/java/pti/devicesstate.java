@@ -6,7 +6,6 @@
 package pti;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -14,7 +13,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.*;
 import javax.ejb.Stateless;
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  *
@@ -49,7 +46,7 @@ public class devicesstate {
         Integer state = -1;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite");
+            conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             stmt = conn.createStatement();
             while(rs.next()){
                 rs = stmt.executeQuery("Select state from users u, devices d where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
@@ -63,7 +60,7 @@ public class devicesstate {
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        state = 2;
+        //state = 2;
         return state;
     }
     
@@ -78,7 +75,7 @@ public class devicesstate {
         Integer state = -1;
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite");
+            conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             stmt = conn.createStatement();
             while(rs.next()){
                 rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token

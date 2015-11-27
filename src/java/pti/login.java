@@ -6,7 +6,6 @@ package pti;
 * and open the template in the editor.
 */
 import java.sql.*;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -36,7 +35,7 @@ public class login {
         
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\david\\Desktop\\pti.sqlite"); 
+            conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite"); 
             stmt = conn.createStatement();
             int contador = 0;
             rs = stmt.executeQuery("Select count (*) as contador from users where username =\""+user+"\" and password = \""+password+"\";");
@@ -59,10 +58,10 @@ public class login {
         return token;
     }
     
-    /*@POST
+    @POST
     public String loginpost(@FormParam("user") String user, @FormParam("password") String password) {
         return $login(user, password);
     }
-    */
+    
     
 }
