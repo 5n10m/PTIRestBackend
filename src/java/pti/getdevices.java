@@ -32,7 +32,7 @@ public class getdevices {
     }
     
     String $getdevices(String username, String password) {
-        String result = null;
+        String result = "-1 -1 -1 -1 -1";
         try {
             Class.forName("org.sqlite.JDBC");
         }
@@ -46,10 +46,12 @@ public class getdevices {
             ResultSet rs = statement.executeQuery("select count (*) as total from users where username = \""+ username +"\" and  password = \""+ password +"\"");
             
             if("1".equals(rs.getString("total"))) {      //Si les credencials introduides coincideixen
-                rs = statement.executeQuery("select id,description,activated,state,type from devices where user = \""+ username +"\"");
+                rs = statement.executeQuery("select id as userid from  users where username = \""+ username +"\" and  password = \""+ password +"\"");
+                int userid = rs.getInt("userid");
+                rs = statement.executeQuery("select id,description,activated,state,type from devices where userid = " + userid);
             
                 while (rs.next()) {
-                    if (result == null) result = rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n";
+                    if (result.equals("-1 -1 -1 -1 -1")) result = rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n";
                     else result += (rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n");
                 }
 
