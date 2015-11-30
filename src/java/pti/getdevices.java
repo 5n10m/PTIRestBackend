@@ -43,8 +43,7 @@ public class getdevices {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select count (*) as total from users where username = \""+ username +"\" and  password = \""+ password +"\"");
-            
+            /*ResultSet rs = statement.executeQuery("select count (*) as total from users where username = \""+ username +"\" and  password = \""+ password +"\"");
             if("1".equals(rs.getString("total"))) {      //Si les credencials introduides coincideixen
                 rs = statement.executeQuery("select id as userid from  users where username = \""+ username +"\" and  password = \""+ password +"\"");
                 int userid = rs.getInt("userid");
@@ -54,12 +53,32 @@ public class getdevices {
                     if (result.equals("-1 -1 -1 -1 -1")) result = rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n";
                     else result += (rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n");
                 }
-
                 connection.close();
             }
             else {
                 connection.close();
+            }*/
+            
+            /*int contador = 0;
+            ResultSet rs = statement.executeQuery("select count (*) as contador from users where username =\""+username+"\" and password = \""+password+"\";");
+            while(rs.next()){
+                //Retrieve by column name
+                contador = rs.getInt("contador");
             }
+            if (contador > 0) result = "0 0 0 0 0";
+            connection.close();*/
+            
+            ResultSet rs = statement.executeQuery("select id as id from  users where username = \""+ username +"\" and  password = \""+ password +"\"");
+            int userid = rs.getInt("id");
+            if (userid > 0) {      //Si les credencials introduides coincideixen
+                rs = statement.executeQuery("select id,description,activated,state,type from devices where userid = " + userid);
+                while (rs.next()) {
+                    if (result.equals("-1 -1 -1 -1 -1")) result = rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n";
+                    else result += (rs.getString("id") + " " + rs.getString("description") + " " + rs.getString("activated") + " " + rs.getString("state") + rs.getString("type") + "\n");
+                }
+            }
+            else result = "0 0 0 0 0";
+            connection.close();
             
         }
         catch(SQLException e) {
