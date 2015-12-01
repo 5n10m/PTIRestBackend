@@ -84,10 +84,11 @@ public class devicesstate {
                 state = rs.getInt("state");
                                 
                 String encodedQuery = URLEncoder.encode("", "UTF-8");
-                String postData = "state="+newstate+encodedQuery;
+                String postData ="device="+deviceID+"state="+newstate+encodedQuery;
                 
                 // Connect to the web
-                URL url = new URL("http://hers.no-ip.org/cgi-bin/file_test.py");
+                URL url = new URL("http://hers.no-ip.org/cgi-bin/sendOrder.py");
+                //URL url = new URL("http://hers.no-ip.org/cgi-bin/file_test.py");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
