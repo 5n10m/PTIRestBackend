@@ -78,8 +78,8 @@ public class devicesstate {
             conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             stmt = conn.createStatement();
             while(rs.next()){
-                rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
-                
+                //rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
+                rs = stmt.executeQuery("UPDATE users SET state = \""+ newstate +"\" where userid = 1 and id = "+deviceID+";");
                 //Retrieve by column name
                 state = rs.getInt("state");
                                 
