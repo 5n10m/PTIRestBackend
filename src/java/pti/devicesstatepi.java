@@ -70,14 +70,13 @@ public class devicesstatepi {
     Integer $setdevicestate(String user, String password, Integer deviceID, Integer newstate){
         Connection conn = null;
         Statement stmt = null;
-        ResultSet rs = null;
         Integer state = -1;
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             stmt = conn.createStatement();
             //rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
-            rs = stmt.executeQuery("UPDATE users SET state = \""+ newstate +"\" where userid = 1 and id = "+deviceID+";");
+            stmt.executeUpdate("UPDATE devices SET state = \""+ newstate +"\" where userid = 1 and id = "+deviceID+";");
             
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);

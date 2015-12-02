@@ -71,19 +71,52 @@ public class devicesstate {
     Integer $setdevicestate(String user, String password, Integer deviceID, Integer newstate){
         Connection conn = null;
         Statement stmt = null;
-        ResultSet rs = null;
+        
         Integer state = -1;
         try {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite://home/pti/pti.sqlite");
             stmt = conn.createStatement();
-            while(rs.next()){
-                //rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
-                rs = stmt.executeQuery("UPDATE users SET state = \""+ newstate +"\" where userid = 1 and id = "+deviceID+";");
+           
+            //rs = stmt.executeQuery("update from users u, devices d SET state = \""+ newstate +"\" where u.username = "+user+" and u.password = "+password+" and u.id = d.userid and d.id = "+deviceID+";"); // Verificar la validesa del token
+            stmt.executeUpdate("UPDATE devices SET state = \""+ newstate +"\" where userid = 1 and id = "+deviceID+";");
                 //Retrieve by column name
-                state = rs.getInt("state");
+            //state = rs.getInt("state");
+             
+           
+                
+                String url = "http://hers.no-ip.org/cgi-bin/sendOrder.py?deviceID="+deviceID+"&newstate="+newstate;
+		
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		//con.setRequestProperty("deviceID", "");
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		//state = Integer.parseInt(response.toString());
+                
+                
+                
                                 
-                String encodedQuery = URLEncoder.encode("", "UTF-8");
+                /*String encodedQuery = URLEncoder.encode("", "UTF-8");
                 String postData ="device="+deviceID+"state="+newstate+encodedQuery;
                 
                 // Connect to the web
@@ -112,7 +145,7 @@ public class devicesstate {
                 // Close streams
                 br.close();
                 os.close();
-            }
+            }*/
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
             
