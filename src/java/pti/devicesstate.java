@@ -54,6 +54,7 @@ public class devicesstate {
                 //Retrieve by column name
                 state = rs.getInt("state");
             }
+            conn.close();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(devicesstate.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -85,31 +86,35 @@ public class devicesstate {
              
            
                 
-                String url = "http://hers.no-ip.org/cgi-bin/sendOrder.py?deviceID="+deviceID+"&newstate="+newstate;
-		
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            String url = "http://hers.no-ip.org/cgi-bin/sendOrder.py?deviceID="+deviceID+"&newstate="+newstate;
 
-		// optional default is GET
-		con.setRequestMethod("GET");
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-		//add request header
-		//con.setRequestProperty("deviceID", "");
+            // optional default is GET
+            con.setRequestMethod("GET");
 
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
+            //add request header
+            //con.setRequestProperty("deviceID", "");
 
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending 'GET' request to URL : " + url);
+            System.out.println("Response Code : " + responseCode);
 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
 
+            while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+            }
+            in.close();
+
+            //Retornem el new state del dispositiu i tanquem la connexio de la BD
+            ResultSet rs = stmt.executeQuery("select state as state from devices where id = \""+ deviceID +"\"");
+            state = rs.getInt("state");
+            conn.close();
 		//print result
 		//state = Integer.parseInt(response.toString());
                 
